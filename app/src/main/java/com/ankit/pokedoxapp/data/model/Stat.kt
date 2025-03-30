@@ -1,5 +1,8 @@
 package com.ankit.pokedoxapp.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Stat(
     val base_stat: Int,
     val effort: Int,

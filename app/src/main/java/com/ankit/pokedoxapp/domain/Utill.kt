@@ -24,7 +24,7 @@ object PaletteGenerator {
         imageUrl: String,
         context: Context
     ): Bitmap? {
-        return withContext(Dispatchers.IO) { // Run in the background
+        return withContext(Dispatchers.IO) {
             val loader = ImageLoader(context)
             val request = ImageRequest.Builder(context)
                 .data(imageUrl)
@@ -36,77 +36,10 @@ object PaletteGenerator {
 
             if (imageResult is SuccessResult) {
                 imageResult.image.toBitmap()
-
             } else {
                 null
             }
         }
     }
-
-
-    fun extractColorsFromBitmap(bitmap: Bitmap): Map<String, String> {
-        return mapOf(
-            "vibrant" to parseColorSwatch(
-                color = Palette.from(bitmap).generate().vibrantSwatch
-            ),
-            "darkVibrant" to parseColorSwatch(
-                color = Palette.from(bitmap).generate().darkVibrantSwatch
-            ),
-            "onDarkVibrant" to parseBodyColor(
-                color = Palette.from(bitmap).generate().darkVibrantSwatch?.bodyTextColor
-            )
-        )
-    }
-
-    private fun parseColorSwatch(color: Palette.Swatch?): String {
-        return if (color != null) {
-            val parsedColor = Integer.toHexString(color.rgb)
-            return "#$parsedColor"
-        } else {
-            "#000000"
-        }
-    }
-
-    private fun parseBodyColor(color: Int?): String {
-        return if (color != null) {
-            val parsedColor = Integer.toHexString(color)
-            "#$parsedColor"
-        } else {
-            "#FFFFFF"
-        }
-    }
-
-
-
-
-    fun Bitmap.createPaletteAsync() : Int {
-        var color : Int? = null
-        Palette.from(this).generate { palette ->
-           color =  palette?.dominantSwatch?.rgb?: androidx.compose.ui.graphics.Color.Gray.toArgb()
-        }
-
-        Log.d("Color", "createPaletteAsync: $color")
-        return color!!
-    }
-
-
-    suspend fun getBitMapFromUrlImage(context: Context,url : String){
-        val request = ImageRequest.Builder(context)
-            .data(url)
-            .allowHardware(false)
-            .listener(onSuccess = { _,successResult ->
-                val result = successResult as BitmapDrawable
-                val bitmap = result.bitmap
-                Log.e("TAG", "getBitMapFromUrlImage: $bitmap", )
-            })
-            .build()
-
-
-       // request.execute(context)
-
-
-    }
-
-
 
 }

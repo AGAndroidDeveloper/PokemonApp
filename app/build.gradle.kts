@@ -56,8 +56,6 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:${ktor_version}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     implementation("io.ktor:ktor-client-serialization-jvm:${ktor_version}")
-    implementation("io.ktor:ktor-client-serialization:2.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -84,6 +82,8 @@ dependencies {
     // navigation in compose
     val nav_version = "2.8.9"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.paging:paging-compose:3.3.6")
+
     // pallet api
     //implementation("androidx.palette:palette:1.0.0")
     //implementation(libs.androidx.palette)
@@ -92,7 +92,8 @@ dependencies {
     // room db
     val room_version = "2.6.1"
 
-    implementation("androidx.room:room-runtime:$room_version")
+   // implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-paging:${room_version}")
+    implementation("androidx.room:room-ktx:2.4.3")
 }

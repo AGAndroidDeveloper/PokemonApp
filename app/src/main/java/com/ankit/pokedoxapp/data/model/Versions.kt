@@ -1,5 +1,8 @@
 package com.ankit.pokedoxapp.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Versions(
     val generation_i: GenerationI,
     val generation_ii: GenerationIi,

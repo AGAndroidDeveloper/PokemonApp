@@ -1,18 +1,24 @@
 package com.ankit.pokedoxapp.videmodel
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.ankit.pokedoxapp.domain.PokemonUseCase
 import io.ktor.client.statement.bodyAsText
 import io.ktor.utils.io.InternalAPI
+import kotlinx.coroutines.flow.stateIn
 
 class PokeMonViewmodel(val useCase: PokemonUseCase) : ViewModel() {
-    // TODO WE HAVE TO IMPLEMENT PAGINATION FOR FETCHING POKEMON FROM API
+    private val TAG = "PokeMonViewmodel"
 
     @OptIn(InternalAPI::class)
     suspend fun getPokemonByName(name: String) {
-        val response = useCase.repository.getPokemonByName(name)
-        Log.e("response", "httpResponse: ${response.bodyAsText()}")
+
+
     }
+
+    val response = useCase.invoke().cachedIn(viewModelScope)
 
 }

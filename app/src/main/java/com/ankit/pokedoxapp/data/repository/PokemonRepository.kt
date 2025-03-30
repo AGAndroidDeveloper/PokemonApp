@@ -1,16 +1,11 @@
 package com.ankit.pokedoxapp.data.repository
 
+import androidx.paging.PagingData
 import com.ankit.pokedoxapp.data.remote.PokemonRemoteDataSource
+import com.ankit.pokedoxapp.domain.Pokemon
 import io.ktor.client.statement.HttpResponse
+import kotlinx.coroutines.flow.Flow
 
-class PokemonRepository(val remoteDataSource: PokemonRemoteDataSource) {
-    suspend fun getAllPokemon(limit: Int, offset: Int) {
-        remoteDataSource.getAllPokemon(limit, offset)
-    }
-
-
-    suspend fun getPokemonByName(name: String): HttpResponse {
-      return  remoteDataSource.getPokemonByName(name)
-    }
-
+interface PokemonRepository {
+    fun getPaginatedPokemon() : Flow<PagingData<Pokemon>>
 }

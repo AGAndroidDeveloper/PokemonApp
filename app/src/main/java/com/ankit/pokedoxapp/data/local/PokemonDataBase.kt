@@ -1,4 +1,0 @@
-package com.ankit.pokedoxapp.data.local
-
-class PokemonDataBase {
-}

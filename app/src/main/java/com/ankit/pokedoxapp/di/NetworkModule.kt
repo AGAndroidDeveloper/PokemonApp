@@ -1,8 +1,12 @@
 package com.ankit.pokedoxapp.di
 
+import android.app.Application
+import androidx.room.Room
+import com.ankit.pokedoxapp.data.local.database.PokemonDataBase
 import com.ankit.pokedoxapp.data.remote.PokemonRemoteDataSource
 import com.ankit.pokedoxapp.data.remote.PokemonRemoteDataSourceImpl
 import com.ankit.pokedoxapp.data.repository.PokemonRepository
+import com.ankit.pokedoxapp.data.repository.PokemonRepositoryImpl
 import com.ankit.pokedoxapp.domain.PokemonUseCase
 import com.ankit.pokedoxapp.videmodel.PokeMonViewmodel
 import io.ktor.client.HttpClient
@@ -16,18 +20,16 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 import kotlinx.serialization.serializer
+import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import kotlin.math.sin
 
 object NetworkModule {
     private const val BASE_URL = "https://pokeapi.co/api/v2"
 }
 
-fun provideKtorClient() = HttpClient {
-    install(ContentNegotiation) {
-        json()
-    }
-}
 
 fun provideHttpClient(): HttpClient {
     return HttpClient(Android) {
@@ -44,18 +46,38 @@ fun provideHttpClient(): HttpClient {
                 ignoreUnknownKeys = true
             })
         }
+
+        engine {
+            connectTimeout = 100_000
+            socketTimeout = 100_000
+        }
     }
 }
 
 val appModule = module {
-//    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
-//    viewModelOf(::UserViewModel)
+    single { provideHttpClient() } // Make sure this function is correct
+
+   // single { androidApplication() } // Provide Application instance
+
+    // Room Database
     single {
-        provideHttpClient()
+        Room.databaseBuilder(
+            androidContext(), // Ensure proper context
+            PokemonDataBase::class.java,
+            "PokemonDataBase"
+        ).build()
     }
 
+    // Data Sources
     single<PokemonRemoteDataSource> { PokemonRemoteDataSourceImpl(get()) }
-    single { PokemonRepository(get()) }
+
+    // Repository
+    single<PokemonRepository> { PokemonRepositoryImpl(get(), get()) }
+
+    // UseCase
     single { PokemonUseCase(get()) }
+
+    // ViewModel
     viewModel { PokeMonViewmodel(get()) }
 }
+
