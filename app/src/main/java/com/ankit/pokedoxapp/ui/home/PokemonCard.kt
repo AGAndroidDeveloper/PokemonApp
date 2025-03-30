@@ -94,6 +94,8 @@ fun PokemonCard(modifier: Modifier, pokemon: Pokemon?, onPokemonClick: (Int) -> 
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(pokemon?.imageUrl)
                         .crossfade(true)
+                        .memoryCacheKey(pokemon?.imageUrl)
+                        .diskCacheKey(pokemon?.imageUrl)
                         .build(),
                     imageLoader = imageLoader,
                     contentScale = ContentScale.Fit,

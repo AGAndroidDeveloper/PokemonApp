@@ -25,7 +25,9 @@ fun PokeDoxNavigation(
 
         composable<Destination.Detail> {
             val detail: Destination.Detail = it.toRoute()
-            PokemonDetailScreen(index = detail.index)
+            PokemonDetailScreen(index = detail.index){
+                navController.popBackStack()
+            }
         }
 
     }

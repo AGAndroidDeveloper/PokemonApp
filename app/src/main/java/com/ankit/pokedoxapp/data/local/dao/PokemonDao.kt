@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.ankit.pokedoxapp.data.local.entity.PokemonEntity
 
 @Dao
@@ -14,7 +15,7 @@ interface PokemonDao {
     fun getAllPokemon(): PagingSource<Int, PokemonEntity>
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertAll(users: List<PokemonEntity>)
 
     @Query("DELETE FROM pokemon_table")

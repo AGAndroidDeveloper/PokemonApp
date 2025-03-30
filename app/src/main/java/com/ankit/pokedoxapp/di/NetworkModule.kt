@@ -26,11 +26,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import kotlin.math.sin
 
-object NetworkModule {
-    private const val BASE_URL = "https://pokeapi.co/api/v2"
-}
-
-
 fun provideHttpClient(): HttpClient {
     return HttpClient(Android) {
         // Install the Logging feature
@@ -55,11 +50,8 @@ fun provideHttpClient(): HttpClient {
 }
 
 val appModule = module {
-    single { provideHttpClient() } // Make sure this function is correct
+    single { provideHttpClient() }
 
-   // single { androidApplication() } // Provide Application instance
-
-    // Room Database
     single {
         Room.databaseBuilder(
             androidContext(), // Ensure proper context
@@ -68,16 +60,16 @@ val appModule = module {
         ).build()
     }
 
-    // Data Sources
+
     single<PokemonRemoteDataSource> { PokemonRemoteDataSourceImpl(get()) }
 
-    // Repository
+
     single<PokemonRepository> { PokemonRepositoryImpl(get(), get()) }
 
-    // UseCase
+
     single { PokemonUseCase(get()) }
 
-    // ViewModel
+
     viewModel { PokeMonViewmodel(get()) }
 }
 

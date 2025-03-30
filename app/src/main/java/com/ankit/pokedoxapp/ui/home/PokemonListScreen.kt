@@ -37,9 +37,6 @@ fun PokemonListScreen(
     onPokemonClick: (Int) -> Unit = {}
 ) {
     val pokemon = viewmodel.response.collectAsLazyPagingItems()
-    for (i in pokemon.itemSnapshotList){
-        Log.d("TAG", "PokemonListScreen: $i")
-    }
 
     Scaffold(
         topBar = {
@@ -59,7 +56,10 @@ fun PokemonListScreen(
         containerColor = Color.Black
     ) { paddingValues ->
         LazyVerticalGrid(
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
+            modifier = Modifier.padding(
+                top = paddingValues.calculateTopPadding(),
+                bottom = paddingValues.calculateBottomPadding()
+            ),
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)

@@ -22,7 +22,7 @@ class PokemonRepositoryImpl(
     override fun getPaginatedPokemon(): Flow<PagingData<Pokemon>> {
         val pagingSourceFactory = { roomDb.pokemonDao().getAllPokemon() }
         return Pager(
-            config = PagingConfig(pageSize = 20),
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             remoteMediator = PokemonRemoteMediator(
                 pokemonDataSource = pokemonRemoteDataSource,
                 pokemonDatabase = roomDb
