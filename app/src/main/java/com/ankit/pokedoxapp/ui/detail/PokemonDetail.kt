@@ -1,6 +1,7 @@
 package com.ankit.pokedoxapp.ui.detail
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,12 +34,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.palette.graphics.Palette
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.ankit.pokedoxapp.R
+import com.ankit.pokedoxapp.domain.utill.PaletteGenerator.convertImageUrlToBitmap
 import com.ankit.pokedoxapp.ui.theme.PokeDoxAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,11 +55,31 @@ fun PokemonDetailScreen(
     val imageUrl =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$index.png"
 
+    val dominantColor = remember {
+        mutableStateOf(listOf(Color.Black))
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(imageUrl) {
+        val bitmap = convertImageUrlToBitmap(imageUrl, context)
+        Log.e("TAG", "PokemonCardBitmap: $bitmap")
+        bitmap?.let { it ->
+            Palette.from(it).generate { palette ->
+                val colorLIST = palette?.swatches?.map { c ->
+                    Color(c.rgb)
+                }
+                dominantColor.value = colorLIST!!
+            }
+        }
+    }
+
+
+
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Red.copy(.4f)),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = dominantColor.value.random()),
                 modifier = Modifier,
                 title = {
                     Text(
@@ -93,7 +119,7 @@ fun PokemonDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Red.copy(.4f)),
+                colors = CardDefaults.cardColors(containerColor = dominantColor.value.random()),
                 shape = RoundedCornerShape(bottomEnd = 70.dp, bottomStart = 70.dp)
             ) {
                 val imageLoader = ImageLoader.Builder(LocalContext.current)

@@ -83,6 +83,8 @@ dependencies {
     val nav_version = "2.8.9"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.paging:paging-compose:3.3.6")
+    //paging testing
+    implementation("androidx.paging:paging-testing:3.3.6")
 
     // pallet api
     //implementation("androidx.palette:palette:1.0.0")

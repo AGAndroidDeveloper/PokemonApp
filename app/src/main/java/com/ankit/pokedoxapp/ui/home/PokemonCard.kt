@@ -37,7 +37,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.ankit.pokedoxapp.R
-import com.ankit.pokedoxapp.domain.PaletteGenerator.convertImageUrlToBitmap
+import com.ankit.pokedoxapp.domain.utill.PaletteGenerator.convertImageUrlToBitmap
 import com.ankit.pokedoxapp.domain.Pokemon
 import com.ankit.pokedoxapp.ui.theme.PokeDoxAppTheme
 
@@ -64,9 +64,7 @@ fun PokemonCard(modifier: Modifier, pokemon: Pokemon?, onPokemonClick: (Int) -> 
         modifier = modifier
             .fillMaxSize()
             .padding(vertical = 10.dp)
-            .clickable(true) {
-                onPokemonClick(pokemon?.id ?: 0)
-            },
+            .clickable { onPokemonClick(pokemon?.id ?: 0) }, // Fixed clickable
         colors = CardDefaults.elevatedCardColors(
             containerColor = dominantColor.value
         ),
@@ -80,7 +78,7 @@ fun PokemonCard(modifier: Modifier, pokemon: Pokemon?, onPokemonClick: (Int) -> 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
                     .padding(10.dp),
@@ -107,7 +105,7 @@ fun PokemonCard(modifier: Modifier, pokemon: Pokemon?, onPokemonClick: (Int) -> 
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "${pokemon?.name}",
+                text = pokemon?.name.orEmpty()+" ${pokemon?.id}",
                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 16.sp),
                 textAlign = TextAlign.Center
             )

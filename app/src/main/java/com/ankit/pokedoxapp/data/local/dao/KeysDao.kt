@@ -10,7 +10,7 @@ import com.ankit.pokedoxapp.data.local.entity.PokemonRemoteKeys
 @Dao
 interface KeysDao {
 
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKey: List<PokemonRemoteKeys>)
 
     @Query("SELECT * FROM remote_keys WHERE id = :id")

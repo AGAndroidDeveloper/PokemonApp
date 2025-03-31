@@ -1,6 +1,7 @@
 package com.ankit.pokedoxapp.data.remote
 
 import com.ankit.pokedoxapp.data.model.PokemonResponse
+import com.ankit.pokedoxapp.domain.utill.Result
 import io.ktor.client.statement.HttpResponse
 
 interface PokemonRemoteDataSource {
