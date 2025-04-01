@@ -62,7 +62,8 @@ class PokemonRemoteMediator(
             val pageSize = state.config.pageSize
             Log.d(TAG, "Fetching page with offset: $offset, pageSize: $pageSize")
             val response = pokemonDataSource.getAllPokemon(limit = pageSize, offset = offset)
-            val endOfPaginationReached = response.count == offset - pageSize
+            val endOfPaginationReached =
+                response.count == offset - pageSize || response.results?.isEmpty() == true
 
             val prevPage = if (offset == 0) null else offset - pageSize
             val nextPage = if (endOfPaginationReached) null else offset + pageSize

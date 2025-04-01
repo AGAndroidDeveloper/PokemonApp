@@ -16,7 +16,6 @@ class PokeMonViewmodel(val useCase: PokemonUseCase) : ViewModel() {
     @OptIn(InternalAPI::class)
     suspend fun getPokemonByName(name: String) {
 
-
     }
 
     val response = useCase.invoke().cachedIn(viewModelScope)

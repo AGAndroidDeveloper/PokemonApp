@@ -1,9 +1,10 @@
 package com.ankit.pokedoxapp.data.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Type(
-    val slot: Int,
-    val type: TypeX
+    @SerialName("slot")  val slot: Int,
+    @SerialName("type")  val type: TypeX
 )

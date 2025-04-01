@@ -77,6 +77,7 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0") // Only available on Android/JVM.
     implementation("io.coil-kt.coil3:coil-network-ktor2:3.1.0")
     implementation("io.coil-kt.coil3:coil-network-ktor3:3.1.0")
+    implementation("io.coil-kt.coil3:coil-gif:3.1.0")
 
 
     // navigation in compose

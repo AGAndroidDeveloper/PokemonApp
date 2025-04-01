@@ -8,6 +8,7 @@ import com.ankit.pokedoxapp.data.remote.PokemonRemoteDataSourceImpl
 import com.ankit.pokedoxapp.data.repository.PokemonRepository
 import com.ankit.pokedoxapp.data.repository.PokemonRepositoryImpl
 import com.ankit.pokedoxapp.domain.PokemonUseCase
+import com.ankit.pokedoxapp.ui.detail.PokemonDetailViewmodel
 import com.ankit.pokedoxapp.videmodel.PokeMonViewmodel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
@@ -17,6 +18,8 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 
 import kotlinx.serialization.serializer
@@ -63,13 +66,13 @@ val appModule = module {
 
     single<PokemonRemoteDataSource> { PokemonRemoteDataSourceImpl(get()) }
 
+    single<CoroutineDispatcher> { Dispatchers.IO }
 
-    single<PokemonRepository> { PokemonRepositoryImpl(get(), get()) }
-
+    single<PokemonRepository> { PokemonRepositoryImpl(get(), get(), get()) }
 
     single { PokemonUseCase(get()) }
 
-
     viewModel { PokeMonViewmodel(get()) }
+    viewModel { PokemonDetailViewmodel(get()) }
 }
 

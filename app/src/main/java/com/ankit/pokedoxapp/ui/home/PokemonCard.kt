@@ -1,6 +1,7 @@
 package com.ankit.pokedoxapp.ui.home
 
 import android.content.res.Configuration
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,10 @@ import androidx.compose.ui.unit.sp
 import androidx.palette.graphics.Palette
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
+import coil3.gif.AnimatedImageDecoder
+import coil3.gif.GifDecoder
+import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.util.DebugLogger
@@ -85,27 +90,24 @@ fun PokemonCard(modifier: Modifier, pokemon: Pokemon?, onPokemonClick: (Int) -> 
                 contentAlignment = Alignment.Center
             ) {
                 val imageLoader = ImageLoader.Builder(LocalContext.current)
-                    .logger(DebugLogger())
+                    .diskCachePolicy(CachePolicy.ENABLED)  // Disk caching enabled
+                    .memoryCachePolicy(CachePolicy.ENABLED) // Memory caching enabled
                     .build()
 
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(pokemon?.imageUrl)
-                        .crossfade(true)
-                        .memoryCacheKey(pokemon?.imageUrl)
-                        .diskCacheKey(pokemon?.imageUrl)
-                        .build(),
+                    model = pokemon?.imageUrl,
                     imageLoader = imageLoader,
                     contentScale = ContentScale.Fit,
                     contentDescription = "Pokemon Image",
-                    modifier = Modifier.fillMaxSize(),
                     placeholder = painterResource(R.drawable.charizard_seeklogo),
+                    modifier = Modifier.fillMaxSize()
                 )
+
             }
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = pokemon?.name.orEmpty()+" ${pokemon?.id}",
+                text = pokemon?.name.orEmpty() + " ${pokemon?.id}",
                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 16.sp),
                 textAlign = TextAlign.Center
             )

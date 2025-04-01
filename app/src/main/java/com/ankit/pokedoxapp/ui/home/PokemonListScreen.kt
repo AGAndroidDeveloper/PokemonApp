@@ -2,9 +2,14 @@ package com.ankit.pokedoxapp.ui.home
 
 import android.util.Log
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +48,8 @@ fun PokemonListScreen(
     onPokemonClick: (Int) -> Unit = {}
 ) {
     val pokemon = viewmodel.response.collectAsLazyPagingItems()
+    Log.e("PokemonListScreen", "loadState: ${pokemon.loadState}")
+    val listState = rememberLazyGridState()
 
     Scaffold(
         topBar = {
@@ -61,6 +69,7 @@ fun PokemonListScreen(
         containerColor = Color.Black
     ) { paddingValues ->
         LazyVerticalGrid(
+            state = listState,
             modifier = Modifier.padding(
                 top = paddingValues.calculateTopPadding(),
                 bottom = paddingValues.calculateBottomPadding()
@@ -70,7 +79,8 @@ fun PokemonListScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(pokemon.itemCount, key = { it ->
-                pokemon[it]?.id ?: it
+                Log.e("PokemonListScreen", "key: $it")
+                pokemon[it]!!.id
             }) { it ->
                 PokemonCard(
                     modifier = Modifier
@@ -80,8 +90,54 @@ fun PokemonListScreen(
                     onPokemonClick(it)
                 }
             }
+
+            // Show Loader while loading more data
+            pokemon.apply {
+                when (loadState.append) {
+                    is LoadState.Loading -> {
+                        item { LoadingItem() }
+                    }
+
+                    is LoadState.Error -> {
+                        item { RetryItem { retry() } }
+                    }
+
+                    is LoadState.NotLoading -> {
+                        if (loadState.append.endOfPaginationReached && itemCount == 0) {
+                            //item { EmptyItem() }
+                        }
+                    }
+                }
+            }
         }
 
+    }
+}
+
+@Composable
+fun RetryItem(retry: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "Failed to load data. Tap to retry.")
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = retry) {
+                Text(text = "Retry")
+            }
+        }
+    }
+}
+
+@Composable
+fun LoadingItem() {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }
 
