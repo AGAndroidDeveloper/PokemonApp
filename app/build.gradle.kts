@@ -99,4 +99,6 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-paging:${room_version}")
     implementation("androidx.room:room-ktx:2.4.3")
-}
+    //lotte animation
+    val lottieVersion = "6.6.4"
+    implementation("com.airbnb.android:lottie-compose:${lottieVersion}")}

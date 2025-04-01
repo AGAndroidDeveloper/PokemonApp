@@ -18,17 +18,18 @@ import com.ankit.pokedoxapp.domain.utill.Helper.serialnumberFormatter
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
- fun PokemonDetailTopBar(
+fun PokemonDetailTopBar(
+    title: String? = null,
     dominantColor: List<Color>,
+    index: Int?,
     onBackClick: () -> Unit,
-    index: Int?
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(containerColor = dominantColor.random()),
         modifier = Modifier,
         title = {
             Text(
-                text = "Pokemon Detail",
+                text = title.toString().replaceFirstChar { it.uppercase() },
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )

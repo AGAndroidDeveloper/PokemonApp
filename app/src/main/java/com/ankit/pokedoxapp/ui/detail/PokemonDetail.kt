@@ -30,11 +30,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -53,11 +55,16 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.size.Size
 import coil3.util.DebugLogger
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ankit.pokedoxapp.R
 import com.ankit.pokedoxapp.domain.utill.Helper.serialnumberFormatter
 import com.ankit.pokedoxapp.domain.utill.PaletteGenerator.convertImageUrlToBitmap
 import com.ankit.pokedoxapp.domain.utill.Result
 import com.ankit.pokedoxapp.ui.theme.PokeDoxAppTheme
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,18 +76,11 @@ fun PokemonDetailScreen(
     onBackClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    val rawComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.lotte2))
+    val progress by animateLottieCompositionAsState(composition = rawComposition)
     val dominantColor = remember {
         mutableStateOf(listOf(Color.Black))
     }
-    val imageLoader = ImageLoader.Builder(context)
-        .components {
-            if (SDK_INT >= 28) {
-                add(AnimatedImageDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
-        }
-        .build()
 
     val imageUrl =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$index.png"
@@ -97,6 +97,7 @@ fun PokemonDetailScreen(
                 dominantColor.value = colorLIST!!
             }
         }
+
     }
 
     val state = viewmodel.pokemonState.collectAsStateWithLifecycle()
@@ -110,21 +111,11 @@ fun PokemonDetailScreen(
         }
 
         Result.Loading -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest.Builder(context)
-                            .data(data = R.drawable.loading_lotte_animation).apply(block = {
-                                size(Size.ORIGINAL)
-                            }).build(), imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
-                    modifier = modifier.fillMaxWidth(),
+            Box(modifier = Modifier.fillMaxSize().background(color = Color.Black), contentAlignment = Alignment.Center) {
+                LottieAnimation(
+                    composition = rawComposition,
+                    progress = { progress },
+                    modifier = Modifier.size(100.dp)
                 )
             }
         }
@@ -134,7 +125,6 @@ fun PokemonDetailScreen(
                 (state.value as Result.Success<*>).data as com.ankit.pokedoxapp.data.model.PokemonResponseByName
             Log.e("TAG", "PokemonDetailScreen: $data")
             PokemonDetailContent(index, modifier, dominantColor.value, imageUrl, data, onBackClick)
-
         }
     }
 

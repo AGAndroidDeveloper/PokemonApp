@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +36,7 @@ import coil3.util.DebugLogger
 import com.ankit.pokedoxapp.R
 import com.ankit.pokedoxapp.data.model.PokemonResponseByName
 import com.ankit.pokedoxapp.ui.theme.PokeDoxAppTheme
+import kotlin.toString
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +51,7 @@ fun PokemonDetailContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            PokemonDetailTopBar(dominantColor, onBackClick, index)
+            PokemonDetailTopBar(data?.name, dominantColor, index, onBackClick)
         },
         containerColor = Color.Black
     ) { paddingValues ->
@@ -86,29 +88,15 @@ fun PokemonDetailContent(
                 }
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-                    .padding(10.dp),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "${data?.name}",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
-
-            }
+            detailBottomContent(data)
 
         }
 
 
     }
 }
+
+
 
 
 @Composable
@@ -125,7 +113,8 @@ fun PokemonPreview() {
                 index = 23,
                 modifier = Modifier,
                 dominantColor = listOf(Color.Yellow),
-                imageUrl = imageUrl
+                imageUrl = imageUrl,
+                data = PokemonResponseByName(name = "pokemon")
             ) {
 
             }

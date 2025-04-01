@@ -1,18 +1,14 @@
 package com.ankit.pokedoxapp.ui.detail
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ankit.pokedoxapp.data.model.PokemonResponseByName
 import com.ankit.pokedoxapp.domain.PokemonUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import com.ankit.pokedoxapp.domain.utill.Result
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class PokemonDetailViewmodel(val useCase: PokemonUseCase) : ViewModel() {
     private val _pokemonState = MutableStateFlow<Result<PokemonResponseByName>>(Result.Idle)
