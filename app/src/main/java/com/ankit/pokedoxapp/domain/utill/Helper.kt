@@ -1,5 +1,6 @@
 package com.ankit.pokedoxapp.domain.utill
 
+import com.ankit.pokedoxapp.data.mapper.PokemonMapper.toPokemonInfoDomain
 import com.ankit.pokedoxapp.data.model.PokemonResponseByName
 import com.ankit.pokedoxapp.data.model.Species
 import com.ankit.pokedoxapp.data.model.Stat
@@ -18,7 +19,7 @@ object Helper {
     }
 
 
-    val pokemonData  = PokemonResponseByName(
+    val pokemonData = PokemonResponseByName(
         id = 2,
         name = "ivysaur",
         species = Species(
@@ -66,6 +67,19 @@ object Helper {
         ),
         weight = 130,
         height = 10
+    ).toPokemonInfoDomain()
+
+    private val mapFormatData = mapOf(
+        "hp" to "HP",
+        "attack" to "ATK",
+        "defense" to "DEF",
+        "special-attack" to "STK",
+        "special-defense" to "SPD",
+        "speed" to "SPD"
     )
+
+    fun String.makeNameFormat(): String {
+        return mapFormatData.toMutableMap().getValue(this)
+    }
 
 }

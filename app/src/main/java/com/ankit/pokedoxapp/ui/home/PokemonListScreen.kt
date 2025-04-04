@@ -91,27 +91,10 @@ fun PokemonListScreen(
                 }
             }
 
-            // Show Loader while loading more data
-            pokemon.apply {
-                when (loadState.append) {
-                    is LoadState.Loading -> {
-                        item { LoadingItem() }
-                    }
-
-                    is LoadState.Error -> {
-                        item { RetryItem { retry() } }
-                    }
-
-                    is LoadState.NotLoading -> {
-                        if (loadState.append.endOfPaginationReached && itemCount == 0) {
-                            //item { EmptyItem() }
-                        }
-                    }
-                }
-            }
         }
 
     }
+
 }
 
 @Composable

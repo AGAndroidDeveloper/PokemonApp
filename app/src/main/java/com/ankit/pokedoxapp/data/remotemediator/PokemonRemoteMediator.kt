@@ -48,6 +48,8 @@ class PokemonRemoteMediator(
                 }
 
                 LoadType.APPEND -> {
+                  val id =   state.lastItemOrNull()?.id
+                    Log.e(TAG, " LoadType.APPEND id: $id")
                     val remoteKeys = getRemoteKeyForLastItem(state)
                     val nextKey = remoteKeys?.nextKey
                     if (nextKey == null) {

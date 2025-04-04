@@ -1,4 +1,4 @@
-package com.ankit.pokedoxapp.domain
+package com.ankit.pokedoxapp.domain.model
 
 data class Pokemon(
     val id: Int,

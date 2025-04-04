@@ -9,15 +9,17 @@ import com.ankit.pokedoxapp.domain.PokemonUseCase
 import io.ktor.client.statement.bodyAsText
 import io.ktor.utils.io.InternalAPI
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class PokeMonViewmodel(val useCase: PokemonUseCase) : ViewModel() {
     private val TAG = "PokeMonViewmodel"
 
-    @OptIn(InternalAPI::class)
-    suspend fun getPokemonByName(name: String) {
-
+    init {
+//        viewModelScope.launch {
+//           val value =  response.stateIn(viewModelScope).value
+//            Log.w(TAG, "init: $value")
+//        }
     }
-
     val response = useCase.invoke().cachedIn(viewModelScope)
 
 }

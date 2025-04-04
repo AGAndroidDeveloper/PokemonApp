@@ -5,6 +5,8 @@ import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -60,6 +64,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ankit.pokedoxapp.R
+import com.ankit.pokedoxapp.domain.model.PokemonInfo
 import com.ankit.pokedoxapp.domain.utill.Helper.serialnumberFormatter
 import com.ankit.pokedoxapp.domain.utill.PaletteGenerator.convertImageUrlToBitmap
 import com.ankit.pokedoxapp.domain.utill.Result
@@ -81,6 +86,7 @@ fun PokemonDetailScreen(
     val dominantColor = remember {
         mutableStateOf(listOf(Color.Black))
     }
+    val scrollState = rememberScrollState()
 
     val imageUrl =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$index.png"
@@ -97,7 +103,6 @@ fun PokemonDetailScreen(
                 dominantColor.value = colorLIST!!
             }
         }
-
     }
 
     val state = viewmodel.pokemonState.collectAsStateWithLifecycle()
@@ -111,7 +116,12 @@ fun PokemonDetailScreen(
         }
 
         Result.Loading -> {
-            Box(modifier = Modifier.fillMaxSize().background(color = Color.Black), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
                 LottieAnimation(
                     composition = rawComposition,
                     progress = { progress },
@@ -122,7 +132,7 @@ fun PokemonDetailScreen(
 
         is Result.Success<*> -> {
             val data =
-                (state.value as Result.Success<*>).data as com.ankit.pokedoxapp.data.model.PokemonResponseByName
+                (state.value as Result.Success<*>).data as PokemonInfo
             Log.e("TAG", "PokemonDetailScreen: $data")
             PokemonDetailContent(index, modifier, dominantColor.value, imageUrl, data, onBackClick)
         }

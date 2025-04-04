@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.ankit.pokedoxapp.data.local.database.PokemonDataBase
 import com.ankit.pokedoxapp.data.remote.PokemonRemoteDataSource
 import com.ankit.pokedoxapp.data.remote.PokemonRemoteDataSourceImpl
-import com.ankit.pokedoxapp.data.repository.PokemonRepository
+import com.ankit.pokedoxapp.domain.repository.PokemonRepository
 import com.ankit.pokedoxapp.data.repository.PokemonRepositoryImpl
 import com.ankit.pokedoxapp.domain.PokemonUseCase
 import com.ankit.pokedoxapp.ui.detail.PokemonDetailViewmodel

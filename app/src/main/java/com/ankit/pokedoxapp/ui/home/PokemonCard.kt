@@ -43,7 +43,7 @@ import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.ankit.pokedoxapp.R
 import com.ankit.pokedoxapp.domain.utill.PaletteGenerator.convertImageUrlToBitmap
-import com.ankit.pokedoxapp.domain.Pokemon
+import com.ankit.pokedoxapp.domain.model.Pokemon
 import com.ankit.pokedoxapp.ui.theme.PokeDoxAppTheme
 
 @Composable
